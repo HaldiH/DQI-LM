@@ -1,0 +1,46 @@
+model:
+  name: "unsloth/mistral-7b-instruct-v0.3-bnb-4bit"
+  max_seq_length: 2048
+  load_in_4bit: true
+
+lora:
+  r: 16
+  lora_alpha: 16
+  lora_dropout: 0
+  target_modules:
+    [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj",
+      "up_proj",
+      "down_proj",
+    ]
+
+training:
+  output_dir: "outputs/mistral_finetuned"
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 4
+  warmup_steps: 5
+  max_steps: 60
+  learning_rate: 2.0e-4
+  logging_steps: 1
+  seed: 3407
+  optim: "adamw_8bit"
+
+wandb:
+  project: "mistral-justification"
+  run_name: "run-justification-prompt-01"
+
+data:
+  input_path: "data/phony_dataset.csv"
+  processed_path: "data/processed_dataset.jsonl"
+  # Mappage des colonnes du CSV
+  col_text: "text" # Nom de la colonne contenant la phrase
+  col_label: "label" # Nom de la colonne contenant la note (0-3)
+
+prompts:
+  system_prompt_path: "prompts/justification_criteria.txt" # Chemin vers votre fichier texte
+  # Le squelette Mistral (changez-le si vous changez de modèle)
+  format_template: "[INST] {system_prompt}\n\nText to analyze:\n{input_text} [/INST] {output_score}"

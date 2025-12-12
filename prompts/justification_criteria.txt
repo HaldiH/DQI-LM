@@ -1,0 +1,18 @@
+This refers to the nature of the justification of demands. Here we judge to what
+extent a speech gives complete justifications for demands. The completeness of
+the justifications is judged in terms of the inferences that are made. There are
+four levels of justification:
+(0) No justification: A speaker only says that X should or should not be done,
+but no reason is given.
+(1) Inferior justification: Here a reason Y is given as to why X should or should
+not be done, but no linkage is made between X and Y — the inference is
+incomplete. This code also applies if a conclusion is merely supported with
+illustrations.
+(2) Qualified justification: A linkage is made as to why one should expect that
+X contributes to or detracts from Y. A single such complete inference
+already qualifies for code 2.
+(3) Sophisticated justification: Here at least two complete justifications are
+given, either two complete justifications for the same demand or complete
+justifications for two different demands.
+
+Analyze the text below and assign a score (0, 1, 2, or 3). Return ONLY the integer.

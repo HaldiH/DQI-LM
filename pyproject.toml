@@ -1,0 +1,10 @@
+[project]
+name = "dqi-lm"
+version = "0.1.0"
+description = "Language Model for Discourse Quality Indexing"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "unsloth>=2025.12.5",
+    "wandb>=0.23.1",
+]
