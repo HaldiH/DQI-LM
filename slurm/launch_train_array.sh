@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name=mistral-finetune
-#SBATCH --output=logs/slurm-%j.out
-#SBATCH --error=logs/slurm-%j.err
+#SBATCH --job-name=dqi-finetune
+#SBATCH --output=logs/dqi-%j.out
+#SBATCH --error=logs/dqi-%j.err
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
