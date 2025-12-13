@@ -19,12 +19,6 @@ fi
 
 source .venv/bin/activate
 
-if [ -f .env ]; then
-    set -a
-    source .env
-    set +a
-fi
-
 mkdir -p logs outputs
 
 echo "Preparing data..."

@@ -5,6 +5,8 @@ description = "Language Model for Discourse Quality Indexing"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "python-dotenv>=1.2.1",
     "unsloth>=2025.12.5",
     "wandb>=0.23.1",
+    "weave>=0.52.22",
 ]
