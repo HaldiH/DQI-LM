@@ -30,8 +30,8 @@ training:
   optim: "adamw_8bit"
 
 wandb:
-  project: "mistral-justification"
-  run_name: "run-justification-prompt-01"
+  project: "dqi-justification"
+  run_name: "run-justification-mistral-prompt-01"
 
 data:
   input_path: "data/phony_dataset.csv"
