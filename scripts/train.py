@@ -1,4 +1,3 @@
-# scripts/train.py
 import yaml
 import torch
 from unsloth import FastLanguageModel, is_bfloat16_supported
@@ -15,11 +14,9 @@ load_dotenv()
 
 
 def train(cfg):
-    # 2. Setup WandB
     wandb.login(key=os.getenv("WANDB_API_KEY"))
     wandb.init(project=cfg["wandb"]["project"], name=cfg["wandb"]["run_name"])
 
-    # 3. Load Model and Tokenizer
     model, tokenizer = FastLanguageModel.from_pretrained(
         model_name=cfg["model"]["name"],
         max_seq_length=cfg["model"]["max_seq_length"],
@@ -38,12 +35,10 @@ def train(cfg):
         random_state=cfg["training"]["seed"],
     )
 
-    # 4. Load Dataset
     dataset = load_dataset(
         "json", data_files=cfg["data"]["processed_path"], split="train"
     )
 
-    # 5. Configure Trainer
     trainer = SFTTrainer(
         model=model,
         tokenizer=tokenizer,
@@ -70,11 +65,9 @@ def train(cfg):
         ),
     )
 
-    # 6. Train
     print("Starting training...")
     trainer_stats = trainer.train()
 
-    # 7. Save
     print("Saving model...")
     # model.save_pretrained_gguf(cfg['training']['output_dir'] + "_gguf", tokenizer, quantization_method = "q4_k_m")
     model.save_pretrained(cfg["training"]["output_dir"])

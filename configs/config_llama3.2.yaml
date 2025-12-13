@@ -1,5 +1,5 @@
 model:
-  name: "unsloth/mistral-7b-instruct-v0.3-bnb-4bit"
+  name: "unsloth/Llama-3.2-3B-bnb-4bit"
   max_seq_length: 2048
   load_in_4bit: true
 
@@ -19,7 +19,7 @@ lora:
     ]
 
 training:
-  output_dir: "outputs/mistral_finetuned"
+  output_dir: "outputs/llama3.2_finetuned"
   per_device_train_batch_size: 2
   gradient_accumulation_steps: 4
   warmup_steps: 5
@@ -30,17 +30,14 @@ training:
   optim: "adamw_8bit"
 
 wandb:
-  project: "mistral-justification"
+  project: "llama3.2-justification"
   run_name: "run-justification-prompt-01"
 
 data:
   input_path: "data/phony_dataset.csv"
-  processed_path: "data/processed_dataset.jsonl"
-  # CSV column mapping
-  col_text: "text" # Name of the column containing the sentence
-  col_label: "label" # Name of the column containing the score (0-3)
-
+  processed_path: "data/processed_dataset_llama3.2.jsonl"
+  col_text: "text"
+  col_label: "label"
 prompts:
-  system_prompt_path: "prompts/justification_criteria.txt" # Path to your text file
-  # The Mistral skeleton (change it if you change the model)
+  system_prompt_path: "prompts/justification_criteria.txt"
   format_template: "[INST] {system_prompt}\n\nText to analyze:\n{input_text} [/INST] {output_score}"

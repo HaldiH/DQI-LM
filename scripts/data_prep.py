@@ -15,22 +15,18 @@ def load_prompt_content(path):
 def format_data(cfg):
     print(f"--- Preparing data ---")
 
-    # 1. Read the CSV
     input_path = cfg["data"]["input_path"]
     print(f"Reading dataset: {input_path}")
     df = pd.read_csv(input_path)
 
-    # 2. Read the System Prompt from the text file
     prompt_path = cfg["prompts"]["system_prompt_path"]
     print(f"Loading prompt from: {prompt_path}")
     system_prompt_content = load_prompt_content(prompt_path)
 
-    # 3. Retrieve the template and column names
     template = cfg["prompts"]["format_template"]
     col_text = cfg["data"]["col_text"]
     col_label = cfg["data"]["col_label"]
 
-    # 4. Formatting
     formatted_data = []
     print("Formatting entries...")
     for _, row in df.iterrows():
@@ -42,7 +38,6 @@ def format_data(cfg):
         )
         formatted_data.append({"text": full_text})
 
-    # 5. Saving
     output_path = cfg["data"]["processed_path"]
     dataset = Dataset.from_pandas(pd.DataFrame(formatted_data))
     dataset.to_json(output_path)

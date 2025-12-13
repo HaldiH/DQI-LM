@@ -15,13 +15,8 @@ module purge
 
 mkdir -p logs outputs
 
-if [ $# -gt 0 ]; then
-  CONFIG=$1
-else
-  CONFIG="configs/config.yaml"
-fi
-
 echo "Starting training..."
-make train CONFIG=$CONFIG
+srun make train CONFIG=configs/config.yaml
+srun make train CONFIG=configs/config_llama3.2.yaml
 
 echo "Job finished."
