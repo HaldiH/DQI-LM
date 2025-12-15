@@ -9,10 +9,10 @@ env:
 split:
 	$(PYTHON) scripts/split_dataset.py --config $(CONFIG)
 
-preprocess: split
+preprocess:
 	$(PYTHON) scripts/data_prep.py --config $(CONFIG)
 
-data: preprocess
+data: split preprocess
 
-train: data
+train:
 	$(PYTHON) scripts/train.py --config $(CONFIG)
