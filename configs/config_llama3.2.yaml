@@ -34,8 +34,12 @@ wandb:
   run_name: "run-justification-llama3.2-prompt-01"
 
 data:
-  input_path: "data/phony_dataset.csv"
-  processed_path: "data/processed_dataset_llama3.2.jsonl"
+  raw_path: "data/phony_dataset.csv"
+  train_path: "data/train.csv"
+  val_path: "data/val.csv"
+  test_path: "data/test.csv"
+  processed_train_path: "data/processed_train_llama3.2.jsonl"
+  processed_val_path: "data/processed_val_llama3.2.jsonl"
   col_text: "text"
   col_label: "label"
 prompts:

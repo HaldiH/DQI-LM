@@ -35,14 +35,18 @@ def train(cfg):
         random_state=cfg["training"]["seed"],
     )
 
-    dataset = load_dataset(
-        "json", data_files=cfg["data"]["processed_path"], split="train"
+    train_dataset = load_dataset(
+        "json", data_files=cfg["data"]["processed_train_path"], split="train"
+    )
+    eval_dataset = load_dataset(
+        "json", data_files=cfg["data"]["processed_val_path"], split="train"
     )
 
     trainer = SFTTrainer(
         model=model,
         tokenizer=tokenizer,
-        train_dataset=dataset,
+        train_dataset=train_dataset,
+        eval_dataset=eval_dataset,
         dataset_text_field="text",
         max_seq_length=cfg["model"]["max_seq_length"],
         dataset_num_proc=2,
@@ -58,6 +62,11 @@ def train(cfg):
             logging_steps=cfg["training"]["logging_steps"],
             optim=cfg["training"]["optim"],
             weight_decay=0.01,
+            evaluation_strategy="steps",
+            eval_steps=10,
+            save_strategy="steps",
+            save_steps=10,
+            load_best_model_at_end=True,
             lr_scheduler_type="linear",
             seed=cfg["training"]["seed"],
             output_dir=cfg["training"]["output_dir"],

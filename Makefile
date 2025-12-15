@@ -6,8 +6,13 @@ PYTHON = .venv/bin/python
 env:
 	uv sync
 
-data:
+split:
+	$(PYTHON) scripts/split_dataset.py --config $(CONFIG)
+
+preprocess: split
 	$(PYTHON) scripts/data_prep.py --config $(CONFIG)
 
-train:
+data: preprocess
+
+train: data
 	$(PYTHON) scripts/train.py --config $(CONFIG)
