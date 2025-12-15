@@ -4,7 +4,7 @@ import pandas as pd
 from tqdm import tqdm
 import yaml
 import re
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, mean_absolute_error
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
@@ -86,6 +86,7 @@ def evaluate(config_path):
     print(f"\n--- RESULTS ---")
     print(f"LLM formatting errors : {parsing_errors}/{len(y_pred)}")
     print(f"Accuracy : {accuracy_score(y_true_clean, y_pred_clean):.4f}")
+    print(f"Mean Absolute Error : {mean_absolute_error(y_true_clean, y_pred_clean):.4f}")
 
     print("\nClassification Report :")
     print(
