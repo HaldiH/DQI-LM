@@ -18,14 +18,10 @@ import argparse
 
 def extract_score(generated_text):
     """
-    Cleans the LLM response to keep only the digit.
-    Searches for the last digit generated after [/INST].
+    Extracts the first digit (0-3) found in the generated text.
     """
-    # Cut to keep only the response (after [/INST])
-    response_part = generated_text.split("[/INST]")[-1]
-
     # Search for the first digit that appears (0, 1, 2 or 3)
-    match = re.search(r"[0-3]", response_part)
+    match = re.search(r"[0-3]", generated_text)
     if match:
         return int(match.group(0))
     else:
@@ -76,7 +72,10 @@ def evaluate(config_path):
 
         # Generation
         outputs = model.generate(**inputs, max_new_tokens=4, use_cache=True)
-        decoded = tokenizer.batch_decode(outputs, skip_special_tokens=True)[0]
+        
+        # Decode only the new tokens
+        new_tokens = outputs[0, inputs.input_ids.shape[1]:]
+        decoded = tokenizer.decode(new_tokens, skip_special_tokens=True)
 
         pred = extract_score(decoded)
         y_pred.append(pred)
