@@ -4,7 +4,12 @@ import pandas as pd
 from tqdm import tqdm
 import yaml
 import re
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, mean_absolute_error
+from sklearn.metrics import (
+    classification_report,
+    confusion_matrix,
+    accuracy_score,
+    mean_absolute_error,
+)
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
@@ -76,6 +81,14 @@ def evaluate(config_path):
         pred = extract_score(decoded)
         y_pred.append(pred)
 
+    # Save predictions to CSV
+    results_df = pd.DataFrame(
+        {"text": df_test["text"], "true_label": y_true, "predicted_label": y_pred}
+    )
+    os.makedirs("results", exist_ok=True)
+    results_df.to_csv("results/predictions.csv", index=False)
+    print("\nPredictions saved to 'results/predictions.csv'")
+
     # 4. Calculate metrics
     # Filter parsing errors (-1)
     valid_indices = [i for i, x in enumerate(y_pred) if x != -1]
@@ -86,7 +99,9 @@ def evaluate(config_path):
     print(f"\n--- RESULTS ---")
     print(f"LLM formatting errors : {parsing_errors}/{len(y_pred)}")
     print(f"Accuracy : {accuracy_score(y_true_clean, y_pred_clean):.4f}")
-    print(f"Mean Absolute Error : {mean_absolute_error(y_true_clean, y_pred_clean):.4f}")
+    print(
+        f"Mean Absolute Error : {mean_absolute_error(y_true_clean, y_pred_clean):.4f}"
+    )
 
     print("\nClassification Report :")
     print(
