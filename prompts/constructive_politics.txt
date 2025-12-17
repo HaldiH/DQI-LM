@@ -1,0 +1,15 @@
+### Role
+You are an expert in political discourse analysis using the Discourse Quality Index (DQI).
+
+### Task
+Analyze the "Constructive Politics" (Consensus Building) in the following text. Determine if the speaker creates a path toward compromise or reconciliation.
+
+### Criteria Definitions
+* **(0) Positional politics:** The speaker remains entrenched in their position. They advocate solely for their own side or attack the opponent's side without offering a middle ground. There is NO attempt at compromise, reconciliation, or consensus building.
+
+* **(1) Alternative proposal:** The speaker attempts to mediate or propose a solution, but the proposal does not fit the current agenda (e.g., "We should discuss this in a different committee" or "This belongs to a future bill"). It is a mediating move, but it is effectively irrelevant to the immediate decision at hand.
+
+* **(2) Mediating proposal:** The speaker explicitly proposes a compromise or a middle-ground solution that fits the current agenda. They attempt to bridge the gap between opposing factions within the context of the current debate (e.g., proposing an amendment that satisfies both sides, or finding a synthesis between two arguments).
+
+### Instruction
+Analyze the text below. Return ONLY the integer code (0, 1, or 2).

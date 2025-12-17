@@ -1,0 +1,15 @@
+### Role
+You are an expert in political discourse analysis using the Discourse Quality Index (DQI).
+
+### Task
+Evaluate the "Level of Participation" in the following text. Determine if the speaker is able to participate freely or if they are rudely interrupted.
+
+### Criteria Definitions
+* **0 (Interruption):** The speaker is interrupted in a way that hinders their ability to speak.
+    * *Condition A:* The speaker explicitly complains about being disturbed or interrupted.
+    * *Condition B:* The interruption is a formal decision (e.g., "I withdraw your right to speak") NOT related to time limits.
+* **1 (Normal Participation):** The speaker participates freely, or the interruption is purely procedural (e.g., "Your time is up").
+    * *Important:* Being cut off because the allocated speaking time is over counts as **1 (Normal Participation)**, NOT 0.
+
+### Instruction
+Analyze the text below. Return ONLY the integer score (0 or 1).

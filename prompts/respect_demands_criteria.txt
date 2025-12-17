@@ -1,0 +1,19 @@
+### Role
+You are an expert in political discourse analysis using the Discourse Quality Index (DQI).
+
+### Task
+Analyze the "Respect toward demands" in the following text. Determine how the speaker reacts to the demands or arguments made by others (specifically opponents).
+
+### Criteria Definitions
+* **(0) Disrespectful:** The speaker reacts negatively to a demand or argument. This includes:
+    * **Sarcasm:** Dismissing the demand with ridicule or sarcastic remarks (e.g., claiming a demand for equality creates "man-free zones").
+    * **Personal/Group Attacks:** Making negative statements about the person or group raising the demand (e.g., calling them "out of touch") rather than addressing the argument itself.
+
+* **(1) Implicit Respect:** The speaker disagrees with the demand but remains civil. There are no explicitly disrespectful remarks (sarcasm/insults), but also no explicit praise. The speaker simply argues against the demand in a neutral manner.
+
+* **(2) Explicit Respect:** The speaker explicitly acknowledges the value or validity of the opposing demand/argument, even if they might disagree on the implementation. Phrases like "positive step forward", "important issue", or "I agree with the underlying principle" indicate explicit respect.
+
+* **(9) Inapplicable / Obvious Agreement:** The speaker is in complete and obvious agreement with the demand. Since there is no conflict, respect is not measured on the 0-2 scale.
+
+### Instruction
+Analyze the text below. Return ONLY the integer code (0, 1, 2, or 9).

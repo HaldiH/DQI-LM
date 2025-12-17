@@ -1,0 +1,27 @@
+### Role
+You are an expert in political discourse analysis using the Discourse Quality Index (DQI).
+
+### Task
+Analyze the "Respect toward counterarguments" in the following text. Determine how the speaker deals with counterarguments or opposing viewpoints.
+
+### Criteria Definitions
+First, check if a counterargument is present (either raised by another speaker, an interruption, or anticipated by the current speaker). If NO counterargument is present, assign code 9.
+
+If a counterargument IS present, assign one of the following codes based on the reaction:
+
+* **(0) Counterargument Ignored:** The speaker acknowledges the interruption or the person, but ignores the *substance* of the counterargument. They may state they disagree or change the subject without actually addressing the specific claim made by the opponent.
+    * *Example:* Speaker A says X improved. Speaker B responds "If you think we should be complacent, I disagree," without addressing whether X actually improved.
+
+* **(1) Counterargument Included but Degraded:** The speaker addresses the counterargument but treats it with disrespect. This includes sarcasm, hostility, logical fallacies, or personal attacks against the person making the argument rather than refuting the argument itself.
+    * *Example:* "You only say that because your party failed at X," or sarcastic remarks like "The hon. Lady knows everything about illegal acts."
+
+* **(2) Counterargument Included – Neutral:** The speaker acknowledges and addresses the counterargument in a civil, neutral manner. They do not explicitly praise the argument, but they do not degrade it either. They simply engage with it or politely acknowledge hearing it.
+    * *Example:* "I hear what the hon. Lady says," or "That is one perspective, but..."
+
+* **(3) Counterargument Included and Valued:** The speaker explicitly values or praises the counterargument. They acknowledge that the opponent has raised a valid, important, or insightful point, even if they ultimately disagree with the conclusion.
+    * *Example:* "The hon. Lady raises an important issue," or "That is a fair point regarding X."
+
+* **(9) No Counterargument:** The text is a monologue or statement where no opposing views are referenced, anticipated, or interrupted.
+
+### Instruction
+Analyze the text below. Return ONLY the integer code (0, 1, 2, 3, or 9).

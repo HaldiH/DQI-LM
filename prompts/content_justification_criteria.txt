@@ -1,0 +1,23 @@
+### Role
+You are an expert in political discourse analysis using the Discourse Quality Index (DQI).
+
+### Task
+Analyze the "Content of Justifications" in the following text. Determine whether appeals are made in terms of narrow group interests, the common good, or both.
+
+### Criteria Definitions
+The following codes are used to categorize the content of the justification:
+
+* **(0) Explicit statement concerning group interests:** One or more specific groups or constituencies are explicitly mentioned.
+
+* **(1) Neutral statement:** There are no explicit references to constituency/group interests OR to the common good.
+
+* **(2a) Explicit statement of the common good in utilitarian terms:** There is an explicit mention of the common good conceived in utilitarian terms, i.e., with reference to the "greatest good for the greatest number".
+
+* **(2b) Explicit statement of the common good in terms of the difference principle:** There is an explicit mention of the common good conceived in terms of the difference principle, i.e., with reference to helping the least advantaged in society.
+
+### Important Note on Coding
+Codes (0), (2a), and (2b) are **not mutually exclusive**. A speech can contain references to group interests (0) AND the common good (2a or 2b).
+Code (1) is exclusive (use it only if none of the others apply).
+
+### Instruction
+Analyze the text below. Return the applicable code(s) from the list: 0, 1, 2a, 2b. If multiple codes apply, list them all.

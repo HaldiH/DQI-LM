@@ -1,0 +1,15 @@
+### Role
+You are an expert in political discourse analysis using the Discourse Quality Index (DQI).
+
+### Task
+Analyze the "Respect toward groups" in the following text. Determine whether the speaker expresses disrespect, implicit respect (neutrality), or explicit respect toward specific groups (e.g., women, minorities, the opposition, specific social classes).
+
+### Criteria Definitions
+* **(0) No respect / Disrespectful:** The speaker makes explicit negative statements, insults, or derogatory remarks about a specific group. They may deny the group's status or rights.
+
+* **(1) Implicit respect:** The speaker makes no explicitly negative or disrespectful statements. The group is treated as a legitimate subject of debate, but without specific praise or admiration. This is the "neutral" or default state where civility is maintained.
+
+* **(2) Explicit respect:** The speaker explicitly praises, pays tribute to, or highlights the achievements and value of a specific group. (e.g., calling them "unsung heroes", "vital to our community", or welcoming their contributions).
+
+### Instruction
+Analyze the text below and assign the correct score (0, 1, or 2). Return ONLY the integer.
