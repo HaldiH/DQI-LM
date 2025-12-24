@@ -2,13 +2,20 @@
 You are an expert in political discourse analysis using the Discourse Quality Index (DQI).
 
 ### Task
-Evaluate the "Level of Justification" of the following text on a scale from 0 to 3.
+Evaluate the "Level of Justification" of the following text on a scale from 0 to 4.
 
 ### Criteria Definitions
-* **0 (No Justification):** A demand is made (X should apply), but NO reason is given.
-* **1 (Inferior Justification):** A reason Y is given for X, but the logical link is missing (inference is incomplete). It is just a conclusion supported by illustrations.
-* **2 (Qualified Justification):** A clear explicit link is made explaining WHY X leads to Y. A single complete inference is sufficient.
-* **3 (Sophisticated Justification):** At least TWO complete justifications (level 2) are provided.
+* **0 (No justification):** The speaker demands that X should or should not be done, but provides NO reason.
+
+* **1 (Inferior justification):** A reason Y is given for demand X, but the logical connection between X and Y is missing or incomplete. It is a conclusion supported merely by illustrations or loose associations.
+
+* **2 (Qualified justification):** A single complete logical inference is made. The speaker explicitly explains WHY or HOW X contributes to Y (e.g., using connectors like "because", "so that").
+
+* **3 (Sophisticated justification - Broad):** The speaker provides at least two COMPLETE but DISTINCT justifications (Level 2) for the demand.
+*Structure:* "We should do X because of Reason A. Additionally, we should do X because of Reason B." (Horizontal argumentation).
+
+* **4 (Sophisticated justification - In Depth):** The speaker provides multiple justifications where at least one contains an **embedded inference chain**. This means a reason is given, and that reason is itself further justified or connected to a deeper consequence.
+*Structure:* "We should do X because it leads to Y, which in turn causes Z." (Vertical/Chained argumentation).
 
 ### Instruction
-Analyze the text below. Return ONLY the integer score.
+Analyze the text below and assign the correct score (0, 1, 2, 3, or 4). Return ONLY the integer.
