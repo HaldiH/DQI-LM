@@ -51,16 +51,34 @@ def evaluate(config_path):
     )
     FastLanguageModel.for_inference(model)  # Enable inference mode (faster)
 
-    # 2. Load Test Set
+    # 2. Load Test Set and Speeches
+    merged_debates_path = cfg["data"]["merged_debates_path"]
+    print(f"Reading speeches from: {merged_debates_path}")
+    df_speeches = pd.read_csv(merged_debates_path)
+    print(f"Loaded {len(df_speeches)} speeches")
+
     test_path = cfg["data"]["test_path"]
+    print(f"Reading test dataset: {test_path}")
     df_test = pd.read_csv(test_path)
-    y_true = df_test["label"].tolist()
+
+    # Merge test data with speeches on speech_id
+    print("Merging test data with speeches...")
+    df_test = df_test.merge(
+        df_speeches[["speech_id", "speech"]],
+        left_on="speech_id_1",
+        right_on="speech_id",
+        how="left",
+    )
+    print(f"Test dataset after merge: {len(df_test)} rows")
+
+    col_label = cfg["data"]["col_label"]
+    y_true = df_test[col_label].tolist()
     y_pred = []
 
     print("Starting inference on Test Set...")
 
     # 3. Prediction loop
-    for text in tqdm(df_test["text"]):
+    for text in tqdm(df_test["speech"]):
         # Prepare prompt
         prompt = TEMPLATE.format(
             system_prompt=system_prompt,
@@ -72,9 +90,9 @@ def evaluate(config_path):
 
         # Generation
         outputs = model.generate(**inputs, max_new_tokens=4, use_cache=True)
-        
+
         # Decode only the new tokens
-        new_tokens = outputs[0, inputs.input_ids.shape[1]:]
+        new_tokens = outputs[0, inputs.input_ids.shape[1] :]
         decoded = tokenizer.decode(new_tokens, skip_special_tokens=True)
 
         pred = extract_score(decoded)
@@ -82,7 +100,7 @@ def evaluate(config_path):
 
     # Save predictions to CSV
     results_df = pd.DataFrame(
-        {"text": df_test["text"], "true_label": y_true, "predicted_label": y_pred}
+        {"speech": df_test["speech"], "true_label": y_true, "predicted_label": y_pred}
     )
     os.makedirs("results", exist_ok=True)
     results_df.to_csv("results/predictions.csv", index=False)
