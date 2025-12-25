@@ -79,7 +79,7 @@ def evaluate(config_path):
     print(f"Number of classes: {num_classes}")
     print(f"Results will be saved to: {results_dir}")
 
-    y_true = df_test[col_label].tolist()
+    y_true = df_test[col_label].astype(int).tolist()
     y_pred = []
 
     print("Starting inference on Test Set...")

@@ -1,11 +1,11 @@
 model:
-  name: "unsloth/Llama-3.2-3B-bnb-4bit"
-  max_seq_length: 2048
+  name: "unsloth/Llama-3.1-8B-Instruct-bnb-4bit"
+  max_seq_length: 8192
   load_in_4bit: true
 
 lora:
-  r: 16
-  lora_alpha: 16
+  r: 32
+  lora_alpha: 32
   lora_dropout: 0
   target_modules:
     [
@@ -19,29 +19,36 @@ lora:
     ]
 
 training:
-  output_dir: "outputs/llama3.2_finetuned"
+  output_dir: "outputs/llama3.1_finetuned"
   per_device_train_batch_size: 2
   gradient_accumulation_steps: 4
-  warmup_steps: 5
-  max_steps: 60
-  learning_rate: 2.0e-4
+  warmup_steps: 30
+  max_steps: 300
+  learning_rate: 1.0e-4
   logging_steps: 1
   seed: 3407
   optim: "adamw_8bit"
 
 wandb:
   project: "dqi-justification"
-  run_name: "run-justification-llama3.2-prompt-01"
+  run_name: "run-justification-llama3.1-prompt-01"
 
 data:
-  raw_path: "data/phony_dataset.csv"
-  train_path: "data/train.csv"
-  val_path: "data/val.csv"
-  test_path: "data/test.csv"
-  processed_train_path: "data/processed_train_llama3.2.jsonl"
-  processed_val_path: "data/processed_val_llama3.2.jsonl"
-  col_text: "text"
-  col_label: "label"
+  raw_debates_dir: "data/raw/hein-daily"
+  merged_debates_path: "data/clean/merged_debates.csv"
+  input_path: "data/raw/USfinal-clean.csv"
+  train_path: "data/clean/train.csv"
+  val_path: "data/clean/val.csv"
+  test_path: "data/clean/test.csv"
+  processed_train_path: "data/processed_train.jsonl"
+  processed_val_path: "data/processed_val.jsonl"
+  # CSV column mapping
+  col_label: "Justification-level" # Name of the column containing the score (0-3)
+  col_speech: "speech" # Name of the column containing the text to analyze
+  labels: [0, 1, 2, 3, 4]
+
+evaluation:
+  results_dir: "results/llama3.1_finetuned"
+
 prompts:
-  system_prompt_path: "prompts/justification_criteria.txt"
-  format_template: "[INST] {system_prompt}\n\nText to analyze:\n{input_text} [/INST] {output_score}"
+  system_prompt_path: "prompts/justification_criteria.txt" # Path to your text file
