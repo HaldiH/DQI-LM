@@ -1,5 +1,6 @@
 import torch
 from unsloth import FastLanguageModel
+from unsloth.chat_templates import get_chat_template
 import pandas as pd
 from tqdm import tqdm
 import yaml
@@ -21,7 +22,7 @@ def extract_score(generated_text, num_classes):
     Extracts the first digit found in the generated text that is a valid class label.
     """
     # Create pattern for valid class indices (0 to num_classes-1)
-    valid_digits = "|" .join(str(i) for i in range(num_classes))
+    valid_digits = "|".join(str(i) for i in range(num_classes))
     pattern = f"[{valid_digits}]"
     match = re.search(pattern, generated_text)
     if match:
@@ -39,8 +40,6 @@ def evaluate(config_path):
     with open(cfg["prompts"]["system_prompt_path"], "r") as f:
         system_prompt = f.read().strip()
 
-    TEMPLATE = cfg["prompts"]["format_template"]
-
     # 1. Load fine-tuned model
     model_path = cfg["training"]["output_dir"]
 
@@ -52,6 +51,7 @@ def evaluate(config_path):
         load_in_4bit=True,
     )
     FastLanguageModel.for_inference(model)  # Enable inference mode (faster)
+    tokenizer = get_chat_template(tokenizer)
 
     # 2. Load Test Set and Speeches
     merged_debates_path = cfg["data"]["merged_debates_path"]
@@ -78,7 +78,7 @@ def evaluate(config_path):
     results_dir = cfg["evaluation"]["results_dir"]
     print(f"Number of classes: {num_classes}")
     print(f"Results will be saved to: {results_dir}")
-    
+
     y_true = df_test[col_label].tolist()
     y_pred = []
 
@@ -86,11 +86,15 @@ def evaluate(config_path):
 
     # 3. Prediction loop
     for text in tqdm(df_test["speech"]):
-        # Prepare prompt
-        prompt = TEMPLATE.format(
-            system_prompt=system_prompt,
-            input_text=text,
-            output_score="",  # Leave empty for model completion
+        # Prepare messages in chat format
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": f"Text to analyse: '{text}'"},
+        ]
+
+        # Convert messages to prompt text using tokenizer chat template
+        prompt = tokenizer.apply_chat_template(
+            messages, tokenize=False, add_generation_prompt=True
         )
 
         inputs = tokenizer([prompt], return_tensors="pt").to("cuda")
@@ -129,7 +133,7 @@ def evaluate(config_path):
 
     # Generate target names dynamically
     target_names = [f"Level {i}" for i in range(num_classes)]
-    
+
     print("\nClassification Report :")
     print(
         classification_report(
@@ -146,7 +150,7 @@ def evaluate(config_path):
     # Generate dynamic tick labels
     pred_labels = [f"Pred {i}" for i in range(num_classes)]
     true_labels = [f"True {i}" for i in range(num_classes)]
-    
+
     plt.figure(figsize=(8, 6))
     sns.heatmap(
         cm,
