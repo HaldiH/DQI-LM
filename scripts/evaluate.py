@@ -44,14 +44,22 @@ def evaluate(config_path):
     model_path = cfg["training"]["output_dir"]
 
     print(f"Loading model from {model_path}...")
-    model, tokenizer = FastLanguageModel.from_pretrained(
+    model, tokenizer_or_processor = FastLanguageModel.from_pretrained(
         model_name=model_path,
         max_seq_length=cfg["model"]["max_seq_length"],
         dtype=None,
         load_in_4bit=True,
     )
     FastLanguageModel.for_inference(model)  # Enable inference mode (faster)
-    tokenizer = get_chat_template(tokenizer)
+    # Some models (e.g., Pixtral/vision-capable variants) return a Processor
+    # which expects image inputs. For text-only inference, unwrap to the
+    # underlying text tokenizer when available.
+    text_tokenizer = (
+        tokenizer_or_processor.tokenizer
+        if hasattr(tokenizer_or_processor, "tokenizer")
+        else tokenizer_or_processor
+    )
+    chat_tokenizer = get_chat_template(text_tokenizer)
 
     # 2. Load Test Set and Speeches
     merged_debates_path = cfg["data"]["merged_debates_path"]
@@ -93,18 +101,19 @@ def evaluate(config_path):
         ]
 
         # Convert messages to prompt text using tokenizer chat template
-        prompt = tokenizer.apply_chat_template(
+        prompt = chat_tokenizer.apply_chat_template(
             messages, tokenize=False, add_generation_prompt=True
         )
 
-        inputs = tokenizer([prompt], return_tensors="pt").to("cuda")
+        # Encode with the text tokenizer, not a vision processor
+        inputs = text_tokenizer([prompt], return_tensors="pt").to("cuda")
 
         # Generation
         outputs = model.generate(**inputs, max_new_tokens=4, use_cache=True)
 
         # Decode only the new tokens
         new_tokens = outputs[0, inputs.input_ids.shape[1] :]
-        decoded = tokenizer.decode(new_tokens, skip_special_tokens=True)
+        decoded = text_tokenizer.decode(new_tokens, skip_special_tokens=True)
 
         pred = extract_score(decoded, num_classes)
         y_pred.append(pred)

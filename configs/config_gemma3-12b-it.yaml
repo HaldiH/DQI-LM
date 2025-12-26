@@ -1,10 +1,10 @@
 model:
-  name: "unsloth/mistral-7b-instruct-v0.3-bnb-4bit"
-  max_seq_length: 8192
-  load_in_4bit: true
+  name: "unsloth/gemma-3-12b-it"
+  max_seq_length: 4096
+  load_in_4bit: false
 
 lora:
-  r: 32
+  r: 64
   lora_alpha: 32
   lora_dropout: 0
   target_modules:
@@ -19,19 +19,20 @@ lora:
     ]
 
 training:
-  output_dir: "outputs/mistral_finetuned"
-  per_device_train_batch_size: 2
-  gradient_accumulation_steps: 4
+  output_dir: "outputs/gemma-3-12b-it_finetuned"
+  per_device_train_batch_size: 4
+  gradient_accumulation_steps: 8
   warmup_steps: 30
   max_steps: 300
   learning_rate: 1.0e-4
   logging_steps: 1
   seed: 3407
-  optim: "adamw_8bit"
+  optim: "adamw_torch"
+  gradient_checkpointing: true
 
 wandb:
   project: "dqi-justification"
-  run_name: "run-justification-mistral-prompt-01"
+  run_name: "run-justification-gemma-3-12b-it-prompt-01"
 
 data:
   raw_debates_dir: "data/raw/hein-daily"
@@ -48,7 +49,7 @@ data:
   labels: [0, 1, 2, 3, 4]
 
 evaluation:
-  results_dir: "results"
+  results_dir: "results/gemma-3-12b-it_finetuned"
 
 prompts:
   system_prompt_path: "prompts/justification_criteria.txt" # Path to your text file

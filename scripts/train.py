@@ -32,7 +32,7 @@ def train(cfg):
         lora_alpha=cfg["lora"]["lora_alpha"],
         lora_dropout=cfg["lora"]["lora_dropout"],
         bias="none",
-        use_gradient_checkpointing="unsloth",
+        use_gradient_checkpointing=cfg["training"]["gradient_checkpointing"],
         random_state=cfg["training"]["seed"],
     )
 
