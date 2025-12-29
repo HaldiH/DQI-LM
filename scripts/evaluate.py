@@ -76,6 +76,19 @@ def evaluate(config_path):
         name=f"{cfg['wandb']['run_name']}-eval",
         job_type="evaluation",
     )
+
+    artifact_name = f"{cfg['wandb']['run_name']}-model"
+    artifact_path = f"{wandb_run.entity}/{wandb_run.project}/{artifact_name}:latest"
+    artifact = wandb_run.use_artifact(artifact_path, type="model")
+
+    artifact_dir = artifact.get_path(".").ref
+    if not artifact_dir:
+        raise ValueError("Artifact path is invalid.")
+    if artifact_dir.startswith("file://"):
+        model_path = artifact_dir[7:]
+    else:
+        model_path = artifact_dir
+
     weave.init(cfg["wandb"]["project"])
 
     # Load system prompt

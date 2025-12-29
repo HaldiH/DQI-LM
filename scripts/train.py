@@ -98,16 +98,19 @@ def train(cfg):
     trainer_stats = trainer.train()
 
     print("Saving model...")
+    output_dir = cfg["training"]["output_dir"]
     # model.save_pretrained_gguf(cfg['training']['output_dir'] + "_gguf", tokenizer, quantization_method = "q4_k_m")
-    model.save_pretrained(cfg["training"]["output_dir"])
-    tokenizer.save_pretrained(cfg["training"]["output_dir"])
+    model.save_pretrained(output_dir)
+    tokenizer.save_pretrained(output_dir)
+
+    absolute_path = os.path.abspath(output_dir)
 
     artifact = wandb.Artifact(
         name=cfg["wandb"]["run_name"] + "-model",
         type="model",
         description="Trained model artifact",
     )
-    artifact.add_dir(cfg["training"]["output_dir"])
+    artifact.add_reference(f"file://{absolute_path}")
     run.log_artifact(artifact).wait()
     run.finish()
     print("Finished.")

@@ -19,11 +19,11 @@ lora:
     ]
 
 training:
-  output_dir: "outputs/mistral-7b-instruct-v0.3_finetuned"
+  output_dir: "outputs/test"
   per_device_train_batch_size: 6
   gradient_accumulation_steps: 4
-  warmup_steps: 90
-  max_steps: 400
+  warmup_steps: 1
+  max_steps: 10
   learning_rate: 1.0e-4
   logging_steps: 1
   seed: 3407
@@ -32,7 +32,7 @@ training:
 
 wandb:
   project: "dqi-justification"
-  run_name: "mistral-7b-instruct-v0.3"
+  run_name: "test"
 
 data:
   raw_debates_dir: "data/raw/hein-daily"
@@ -49,7 +49,7 @@ data:
   labels: [0, 1, 2, 3, 4]
 
 evaluation:
-  results_dir: "results/mistral-7b-instruct-v0.3_finetuned"
+  results_dir: "results/test"
 
 prompts:
   system_prompt_path: "prompts/justification_criteria.txt" # Path to your text file
