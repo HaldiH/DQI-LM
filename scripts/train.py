@@ -4,6 +4,7 @@ from typing import cast
 from unsloth import FastLanguageModel, is_bfloat16_supported
 from unsloth.chat_templates import get_chat_template
 from trl import SFTConfig, SFTTrainer
+from transformers import TrainerCallback
 from datasets import load_dataset, Dataset
 import weave
 import wandb
@@ -14,9 +15,24 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
+class UploadArtifactCallback(TrainerCallback):
+    def __init__(self, artifact_name, model_dir):
+        self.artifact_name = artifact_name
+        self.model_dir = model_dir
+
+    def on_train_end(self, args, state, control, **kwargs):
+        if wandb.run:
+            print(f"Uploading artifact {self.artifact_name}...")
+            absolute_path = os.path.abspath(self.model_dir)
+
+            artifact = wandb.Artifact(name=self.artifact_name, type="model")
+            artifact.add_reference(f"file://{absolute_path}")
+            wandb.log_artifact(artifact)
+
+
 def train(cfg):
     wandb.login(key=os.getenv("WANDB_API_KEY"))
-    run = wandb.init(project=cfg["wandb"]["project"], name=cfg["wandb"]["run_name"])
+    wandb.init(project=cfg["wandb"]["project"], name=cfg["wandb"]["run_name"])
 
     model, tokenizer = FastLanguageModel.from_pretrained(
         model_name=cfg["model"]["name"],
@@ -68,6 +84,12 @@ def train(cfg):
         processing_class=tokenizer,
         train_dataset=train_dataset,
         eval_dataset=eval_dataset,
+        callbacks=[
+            UploadArtifactCallback(
+                artifact_name=f"{cfg['wandb']['run_name']}-model",
+                model_dir=cfg["training"]["output_dir"],
+            )
+        ],
         args=SFTConfig(
             max_length=cfg["model"]["max_seq_length"],
             dataset_num_proc=2,
@@ -105,14 +127,7 @@ def train(cfg):
 
     absolute_path = os.path.abspath(output_dir)
 
-    artifact = wandb.Artifact(
-        name=cfg["wandb"]["run_name"] + "-model",
-        type="model",
-        description="Trained model artifact",
-    )
-    artifact.add_reference(f"file://{absolute_path}")
-    run.log_artifact(artifact).wait()
-    run.finish()
+    wandb.finish()
     print("Finished.")
 
 
