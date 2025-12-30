@@ -53,54 +53,39 @@ def format_data(cfg):
     df_speeches = pd.read_csv(merged_debates_path)
     print(f"Loaded {len(df_speeches)} speeches")
 
-    # 1. Process Train
-    train_path = cfg["data"]["train_path"]
-    print(f"Reading train dataset: {train_path}")
-    df_train = pd.read_csv(train_path)
+    # Process Train, Validation, and Test splits
+    for split_name, split_key in [
+        ("Train", "train"),
+        ("Validation", "val"),
+        ("Test", "test"),
+    ]:
+        input_path = cfg["data"][f"{split_key}_path"]
+        output_path = cfg["data"][f"processed_{split_key}_path"]
 
-    # Merge train data with speeches on speech_id
-    print("Merging train data with speeches...")
-    df_train = df_train.merge(
-        df_speeches[["speech_id", "speech"]],
-        left_on="speech_id_1",
-        right_on="speech_id",
-        how="left",
-    )
-    print(f"Train dataset after merge: {len(df_train)} rows")
+        print(f"Reading {split_name} dataset: {input_path}")
+        df_split = pd.read_csv(input_path)
 
-    processed_train_path = cfg["data"]["processed_train_path"]
-    train_data = process_split(
-        df_train,
-        system_prompt_content,
-        col_speech,
-        col_label,
-        processed_train_path,
-    )
-    print(f"Sample generated (Train):\n{train_data[0]['messages'][:300]}...")
+        print(f"Merging {split_name} data with speeches...")
+        df_split = df_split.merge(
+            df_speeches[["speech_id", "speech"]],
+            left_on="speech_id_1",
+            right_on="speech_id",
+            how="left",
+        )
+        print(f"{split_name} dataset after merge: {len(df_split)} rows")
 
-    # 2. Process Validation
-    val_path = cfg["data"]["val_path"]
-    print(f"Reading val dataset: {val_path}")
-    df_val = pd.read_csv(val_path)
+        split_data = process_split(
+            df_split,
+            system_prompt_content,
+            col_speech,
+            col_label,
+            output_path,
+        )
 
-    # Merge val data with speeches on speech_id
-    print("Merging val data with speeches...")
-    df_val = df_val.merge(
-        df_speeches[["speech_id", "speech"]],
-        left_on="speech_id_1",
-        right_on="speech_id",
-        how="left",
-    )
-    print(f"Val dataset after merge: {len(df_val)} rows")
-
-    processed_val_path = cfg["data"]["processed_val_path"]
-    process_split(
-        df_val,
-        system_prompt_content,
-        col_speech,
-        col_label,
-        processed_val_path,
-    )
+        if split_name == "Train":
+            print(
+                f"Sample generated ({split_name}):\n{split_data[0]['messages'][:300]}..."
+            )
 
 
 if __name__ == "__main__":

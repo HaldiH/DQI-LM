@@ -15,21 +15,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-class UploadArtifactCallback(TrainerCallback):
-    def __init__(self, artifact_name, model_dir):
-        self.artifact_name = artifact_name
-        self.model_dir = model_dir
-
-    def on_train_end(self, args, state, control, **kwargs):
-        if wandb.run:
-            print(f"Uploading artifact {self.artifact_name}...")
-            absolute_path = os.path.abspath(self.model_dir)
-
-            artifact = wandb.Artifact(name=self.artifact_name, type="model")
-            artifact.add_reference(f"file://{absolute_path}")
-            wandb.log_artifact(artifact)
-
-
 def train(cfg):
     wandb.login(key=os.getenv("WANDB_API_KEY"))
     wandb.init(project=cfg["wandb"]["project"], name=cfg["wandb"]["run_name"])
@@ -84,12 +69,6 @@ def train(cfg):
         processing_class=tokenizer,
         train_dataset=train_dataset,
         eval_dataset=eval_dataset,
-        callbacks=[
-            UploadArtifactCallback(
-                artifact_name=f"{cfg['wandb']['run_name']}-model",
-                model_dir=cfg["training"]["output_dir"],
-            )
-        ],
         args=SFTConfig(
             max_length=cfg["model"]["max_seq_length"],
             dataset_num_proc=2,
@@ -124,8 +103,6 @@ def train(cfg):
     # model.save_pretrained_gguf(cfg['training']['output_dir'] + "_gguf", tokenizer, quantization_method = "q4_k_m")
     model.save_pretrained(output_dir)
     tokenizer.save_pretrained(output_dir)
-
-    absolute_path = os.path.abspath(output_dir)
 
     wandb.finish()
     print("Finished.")

@@ -43,6 +43,7 @@ data:
   test_path: "data/clean/test.csv"
   processed_train_path: "data/processed_train.jsonl"
   processed_val_path: "data/processed_val.jsonl"
+  processed_test_path: "data/processed_test.jsonl"
   # CSV column mapping
   col_label: "Justification-level" # Name of the column containing the score (0-3)
   col_speech: "speech" # Name of the column containing the text to analyze
